@@ -40,3 +40,6 @@ __screenshots__/
 # Windows
 Thumbs.db
 Desktop.ini
+
+#document
+/doc/

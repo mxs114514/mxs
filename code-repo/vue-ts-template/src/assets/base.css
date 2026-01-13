@@ -1,5 +1,8 @@
+@import 'tailwindcss';
+
 /* 重置浏览器默认样式 */
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   width: 100%;
@@ -12,6 +15,8 @@ html, body {
   height: 100%;
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
