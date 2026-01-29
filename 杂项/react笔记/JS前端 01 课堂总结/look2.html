@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 一个最简单的组件模型
+        class Component {
+            // 组件的状态
+            state;
+            // 更新状态，并重新渲染
+            setState(newState) {
+                Object.assign(this.state, newState);
+                this.render();
+            }
+            props;
+            constructor(props) {
+                this.props = props;
+                this.state = {};
+            }
+            // 渲染组件
+            render() {
+                this.props.container.innerHTML = '';
+            }
+        }
+
+        const List = class extends Component {
+            state = {
+                list: []
+            }
+
+            constructor(props) {
+                super(props);
+                this.fetch().then(list => {
+                    this.setState({
+                        list
+                    });
+                    this.render();
+                });
+            }
+
+            render() {
+                super.render();
+                const ul = document.createElement('ul');
+                this.state.list.forEach(item => {
+                    const li = document.createElement('li');
+                    li.textContent = item;
+                    li.addEventListener('click', () => {
+                        this.remove(item);
+                    });
+                    ul.appendChild(li);
+                });
+                const addButton = document.createElement('button');
+                addButton.textContent = 'Add';
+                addButton.addEventListener('click', () => {
+                    this.add('As');
+                })
+                this.props.container.appendChild(addButton);
+                this.props.container.appendChild(ul);
+            }
+
+            fetch() {
+                return Promise.resolve([
+                    "Alice",
+                    "Bob"
+                ]);
+            }
+
+            add(item) {
+                // 状态更新
+                this.setState({
+                    list: [...this.state.list, item]
+                });
+
+                // 网络请求
+                Promise.resolve().catch(() => {
+                    this.remove(item);
+                });
+            }
+
+            remove(item) {
+                const index = this.state.list.indexOf(item);
+                console.log(this.state.list, item, index);
+                if (index !== -1) {
+                    this.setState({
+                        list: this.state.list.filter((_, i) => i !== index)
+                    });
+                    this.render();
+                }
+            }
+        }
+
+        class Counter extends Component {
+            state = {
+                count: 0
+            }
+
+            render() {
+                super.render();
+                this.props.container.textContent = this.state.count;
+            }
+
+            constructor(props) {
+                super(props);
+                this.props.container.addEventListener('click', () => {
+                    this.setState({
+                        count: this.state.count + 1
+                    });
+                });
+                this.render();
+            }
+        }
+
+        const listContainer = document.createElement('div')
+        document.body.appendChild(listContainer);
+        const list = new List({
+            container: listContainer,
+            list: ['Alice', 'Bob', 'Charlie']
+        });
+
+        list.add('Frank');
+        list.remove('Charlie');
+
+        const countetContainer = document.createElement('button')
+        document.body.appendChild(countetContainer);
+        const counter = new Counter({
+            container: countetContainer
+        });
+    </script>
+</body>
+
+</html>

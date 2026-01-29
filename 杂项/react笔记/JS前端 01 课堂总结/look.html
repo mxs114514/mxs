@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="id">
+
+    </div>
+    <script>
+        // 网络请求
+        Promise.resolve(["Alice", "Bob"]).then(list => {
+            // 组件元素的创建
+            const ul = document.createElement('ul');
+            // 组件的挂载
+            document.getElementById('id').appendChild(ul);
+            // 组件渲染
+            function renderListItem(item) {
+                const li = document.createElement('li');
+                li.textContent = item;
+                li.addEventListener('click', () => {
+                    remove(item);
+                })
+                return li;
+            }
+            // 组件的生命周期——挂载
+            list.forEach(item => {
+                ul.appendChild(renderListItem(item));
+            });
+            const addButton = document.createElement('button');
+            addButton.textContent = 'Add';
+            addButton.addEventListener('click', () => {
+                const item = "ok";
+                add(item);
+            });
+            document.getElementById('id').appendChild(addButton);
+            // 组件的生命周期——更新
+            function add(item) {
+                list.push(item);
+                ul.appendChild(renderListItem(item));
+                Promise.resolve().catch(() => {
+                    remove(item);
+                });
+            }
+            function remove(item) {
+                const index = list.indexOf(item);
+                if (index !== -1) {
+                    list.splice(index, 1);
+                    ul.removeChild(ul.children[index]);
+                }
+            }
+            add('Frank');
+            remove('Charlie');
+        })
+
+        // 状态的声明
+        let count = 0;
+        // 组件的创建
+        const counter = document.createElement('button')
+        counter.textContent = '0';
+        counter.addEventListener('click', () => {
+            counter.textContent = `${++count}`;
+        });
+
+        // 组件的挂载
+        document.getElementById('id').appendChild(counter);
+    </script>
+</body>
+
+</html>

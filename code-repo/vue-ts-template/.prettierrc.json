@@ -10,5 +10,6 @@
   "arrowParens": "always",
   "bracketSpacing": true,
   "vueIndentScriptAndStyle": false,
-  "singleAttributePerLine": false
+  "singleAttributePerLine": false,
+  "plugins": ["prettier-plugin-tailwindcss"]
 }
